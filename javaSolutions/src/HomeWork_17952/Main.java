@@ -4,87 +4,91 @@ package HomeWork_17952;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(reader.readLine());
-        System.out.println("n = " + n);
 
-        int score, t;
-        List<Work> works = new ArrayList<>();
-        Work currentWork = null;
+        // 한 학기동안의 전체 작업을 저장. (시간, 점수)
+        Queue<int[]> totalWorks = new LinkedList<>();
+
+        // 밀린 일들을 저장.
+        Stack<int[]> workStack = new Stack<>();
+
+        boolean[] isWorkAdd = new boolean[n];
         int totalScore = 0;
 
-        int workTime = 0;
+        int[] tmp;
+        int time, score;
+        for(int i=0; i<n; i++) {
+            String[] line = reader.readLine().split(" ");
 
-        // 시간동안 진행
-        for (int i = 0; i < n; i++) {
-            String[] line = reader.readLine().split(" "); // 1(or 0) A T
-            boolean isWorkAdd = line[0].equals("1");
+            isWorkAdd[i] = line[0].equals("1");
 
-            // 하는 일도 없고 추가된 일도 없을 때 건너뜀
-            if(currentWork == null && !isWorkAdd)
-                continue;
-
-            // 일이 추가되면 현재 일을 변경
-            if (isWorkAdd) {
-                // 하던 일은 큐에 넣어둠 (가장 앞으로, 참조 전달)
-//                if (currentWork != null)
-                works.add(0, currentWork);
-
-                // 현재 일을 새로 들어온 일로 변경
+            // 1이면 작업이 추가 (큐에 추가)
+            if (isWorkAdd[i]) {
                 score = Integer.parseInt(line[1]);
-                t = Integer.parseInt(line[2]);
-                System.out.printf("Work added: score=%d, time=%d\n", score, t);
-                currentWork = new Work(score, t-1); // 받자마자 일을 함
+                time = Integer.parseInt(line[2]);
+                tmp = new int[2];
+                tmp[0] = time;
+                tmp[1] = score;
+                totalWorks.add(tmp);
             }
-            else { // 일이 추가된게 아니면 하던 일을 수행 (남은시간 감소)
-                currentWork.remainTime--;
+
+        }
+
+        // current[time, score]
+        int[] current = null;
+        for (int i=0; i<n; i++) {
+
+            // 남은 일도 없고 하는 일도 없는 경우
+            if (totalWorks.isEmpty() && current == null) {
+                break;
             }
 
-            // 시간이 다 되면 (일을 마치면) 점수를 더하고 다음 일을 꺼냄.
-            if(currentWork.remainTime == 0) {
-                System.out.println("complete work: " + currentWork);
+            boolean isWork = isWorkAdd[i];
 
-                totalScore += currentWork.score;
+            // 일이 추가된 경우
+            if (isWork) {
+                // 하던 일이 있으면 하던걸 스택에 푸시 (하던 일이 있을 경우 추가되는 작업)
+                if (current != null) {
+                    workStack.push(current);
+                }
+                // 추가된 일을 현재 일로 지정 (항상 수행)
+                current = totalWorks.poll();
+            }
+            // 일이 추가되지 않은 경우
+            else {
+                if (current == null)
+                    continue;
+                // 하던 일이 없으면 continue
+            }
 
-                if (works.isEmpty()) {
-                    currentWork = null;
+            // 하던 일이 있으면 하던 일의 시간을 감소
+            current[0]--;
+
+            // 일을 다 하면
+            if (current[0] == 0) {
+                totalScore += current[1]; // 점수 추가
+
+                // 밀린 일이 있으면 가져오기
+                if (workStack.isEmpty()) {
+                    current = null;
                 }
                 else {
-                    currentWork = works.get(0);
-                    works.remove(0);
+                    current = workStack.pop();
                 }
-
-                System.out.println("poll next work: " + currentWork);
             }
 
-            System.out.println("1 minute passed");
-            System.out.println("current work: " + currentWork);
         }
 
-        System.out.println("works = " + works);
         System.out.println("totalScore = " + totalScore);
-    }
 
-    static class Work {
-
-        public int score;
-        public int remainTime;
-
-        public Work(int score, int remainTime) {
-            this.score = score;
-            this.remainTime = remainTime;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Work score=[%s], remainTime=[%s]", score, remainTime);
-        }
     }
 
 }
