@@ -7,132 +7,171 @@ public class Main {
 
     public static int[][] graph; // 간선 비용 때문에 인접 행렬도 같이 써야 함
     public static int N;
-
-    public static ArrayList<ArrayList<Integer>> closeList; // 인접 리스트
-
     public static final String ALPHA = "0abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    public static ArrayList<Edge> edges;
+    public static int result = 0;
 
     public static void main(String[] args) throws Exception {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(reader.readLine());
 
-        // 그래프를 그리고
+        // 그래프 초기화
         graph = new int[N][N];
         for(int i=0; i<N; i++) {
             Arrays.fill(graph[i], Integer.MAX_VALUE);
         }
 
-        closeList = new ArrayList<>();
-        for (int i=0; i<N; i++) {
-            closeList.add(new ArrayList<>());
-        }
-
+        // 1. 간선 비용 계산을 위해 인접 행렬을 작성한다.
         String line;
         int val;
         for(int i=0; i<N; i++) {
             line = reader.readLine();
-            // 노드 i의 인접 리스트
-            ArrayList<Integer> list = closeList.get(i);
 
             for(int j=0; j<N; j++) {
                 char ch = line.charAt(j);
-                val = ALPHA.indexOf(ch);
+
                 if (ch != '0') {
-                    graph[i][j] = val; // 일단 저장
+                    // 거리
+                    val = ALPHA.indexOf(ch);
 
-                    // 인접 리스트에 추가
-                    if (i != j) {
-                        list.add(j);
+                    // 2. 일단 계산된 랜선 길이를 전체 길이에 추가한다.
+                    result += val;
 
-                        // 반대편에도 추가
-                        ArrayList<Integer> dst = closeList.get(j);
-                        if (!dst.contains(i)) {
-                            dst.add(i);
-                        }
+                    // 인접 행렬에 저장
+                    graph[i][j] = val;
 
+                    // 3. [j][i]와 비교해 더 작은 값으로 인접 행렬을 업데이트한다.
+                    // 입력받는 그래프가 방향이 존재함. 인접 행렬의 [a][b]와 [b][a]가 다름.
+                    // 근데 최소 신장 트리 만들때는 간선이 하나만 있어야 하기 때문에, 둘 중 비용이 작은 쪽으로 양쪽 간선을 업데이트 함.
+                    int small;
+                    if (graph[j][i] != Integer.MAX_VALUE) {
+                        small = Math.min(graph[i][j], graph[j][i]);
+                        graph[i][j] = small;
+                        graph[j][i] = small;
                     }
-//                    graph[i][j] = Math.min(val, graph[j][i]); // 더 작은 놈으로 저장
+                    // [j][i]가 없을 경우 같은 값으로 업데이트
+                    else {
+                        graph[j][i] = val;
+                    }
+
                 }
 
             }
 
         }
 
-        printGraph();
-
-        boolean check = bfs(graph);
-        System.out.println("check = " + check);
-
-        // 모든 노드를 방문하는 최소 거리를 구한 다음에
-        // 그럼 결국 모든 노드를 방문하면서, 동시에 각 노드를 방문하는 최단 거리를 구해야 함
-        // 이게 최소 스패닝 트리임. MST를 공부해야 함.
-        // 완탐 경우의 수를 다 찾은 다음 그 중 최소 거리를 구하나?
-        // 결국 최단 경로? 다익스트라?
-
-        // 모든 노드를 방문하는게 불가하면 -1 리턴 -> bfs를 쓰나?
-
-        // 모든 노드를 방문 가능하다면, 그 최소 거리를 제외한 나머지 간선 비용을 모두 합쳐서 리턴
-
-        // bfs로 탐색 안돌려도 될 것 같다.
-        // 최소 신장 트리 만들어서 집합에 속해있지 않은 노드가 존재하면 -1 리턴하면 될듯.
-
-        // 1. 간선을 하나로 줄이기
-        // 자기 자신에게 연결된 랜선 뽑아서 result에 더해놓기
-        // 중복된 간선의 경우 작은 거 하나만 남기고 나머지 하나는 result에 더해놓기
-
-        // 2. 남은 그래프로 최소 신장 트리 만들기
-
-        // 3. (남은 그래프의 전체 간선 비용) - (최소 신장 트리 비용) 결과를 result에 더하기
-
-        // 4. result 출력하기
-
-    }
-
-    // bfs를 이용해 신장 트리 여부를 판별
-    private static boolean bfs(int[][] graph) {
-
-        boolean[] visited = new boolean[N];
-        Arrays.fill(visited, false);
-
-        Queue<Integer> q = new LinkedList<>();
-
-        // 시작은 0
-        q.add(0);
-        visited[0] = true;
-
-        int cur;
-        while(!q.isEmpty()) {
-            cur = q.poll();
-            System.out.println("cur = " + cur);
-
-            // cur의 인접 리스트에서 방문하지 않은 노드들을 가져와 큐에 추가
-            for (int node: closeList.get(cur)) {
-                if (!visited[node]) {
-                    q.add(node);
-                    visited[node] = true;
-                }
-            }
-
-        }
-
-        for(boolean b: visited) {
-            // 하나라도 방문한 노드가 없으면 false (전체 노드 방문 불가)
-            if (!b)
-                return false;
-        }
-
-        // visited의 모든 요소가 true라면 전체 방문 가능.
-        return true;
-    }
-
-    private static void printGraph() {
+        // 4. 간선 리스트를 만들고 크루스칼 알고리즘을 돌린다.
+        // 간선 리스트 생성
+        edges = new ArrayList<>();
         for(int i=0; i<N; i++) {
-            for(int j=0; j<N; j++) {
-                System.out.printf("%2d ", graph[i][j]);
+            for (int j=i; j<N; j++) {
+
+                // 간선이 존재하고 시작, 끝이 다를 경우
+                if ((graph[i][j] != Integer.MAX_VALUE) && (i != j)) {
+                    edges.add(new Edge(i, j, graph[i][j]));
+                }
+
             }
-            System.out.println();
         }
+
+        // 간선 비용 오름차순 정렬 (크루스칼은 그리디 알고리즘)
+        Collections.sort(edges);
+        int MST = kruskal(edges);
+
+        // 최소 신장 트리가 만들어지지 않는 경우 -1
+        if (MST == -1) {
+            result = -1;
+        }
+        // 최소 신장 트리가 만들어지는 경우: (전체 랜선 길이) - (최소 신장 트리의 비용) = 기부 가능한 랜선 길이
+        else {
+            result -= MST;
+        }
+
+        System.out.println(result);
     }
+
+    // 최소 신장 트리를 만들고 간선 합을 리턴
+    private static int kruskal(ArrayList<Edge> edges) {
+        int total = 0; // 리턴할 최소 신장 트리 비용
+        int edge_num = 0; // 간선 개수 확인 용도 최소 신장 트리의 간선 갯수는 N-1개가 되어야 함.
+
+        // 부모 리스트 초기화
+        int[] parent = new int[N];
+        for(int i=0; i<N; i++)
+            parent[i] = i;
+
+        int n1, n2;
+        int p1, p2;
+        for (Edge e: edges) {
+            n1 = e.node1;
+            n2 = e.node2;
+
+            // 두 노드의 부모 노드를 확인 (집합 루트 노드를 확인)
+            p1 = findParent(parent, n1);
+            p2 = findParent(parent, n2);
+            // 집합의 루트 노드가 다르면 합치기 (부모 노드를 통일)
+            if (p1 != p2) {
+                union(parent, p1, p2);
+                total += e.cost;
+                edge_num++;
+            }
+
+        }
+
+        if (edge_num != (N-1))
+            return -1;
+
+        return total;
+    }
+
+    // node1과 node2를 합치는 함수 (루트 노드를 같게 설정)
+    private static void union(int[] parent, int node1, int node2) {
+        int p1 = findParent(parent, node1);
+        int p2 = findParent(parent, node2);
+
+        // 번호가 더 작은 노드를 부모 노드로 설정
+        if (p1 < p2)
+            parent[p2] = p1;
+        else
+            parent[p1] = p2;
+    }
+
+    // 어떤 노드가 속한 집합의 루트 노드를 찾는 함수
+    private static int findParent(int[] parent, int node) {
+        // 부모가 자기 자신이 아니라면 (부모 노드가 아니라면)
+        if (parent[node] != node) {
+            parent[node] = findParent(parent, parent[node]);
+        }
+
+        // 재귀호출이므로 루트 노드는 자신을 리턴. 나머지 노드는 루트 노드가 이 루트로 설정됨.
+        return parent[node];
+    }
+
+    static class Edge implements Comparable<Edge> {
+
+        public int node1;
+        public int node2;
+        public int cost;
+
+        public Edge(int node1, int node2, int cost) {
+            this.node1 = node1;
+            this.node2 = node2;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Edge e) {
+            return Integer.compare(this.cost, e.cost);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Edge[(%d, %d), cost=%d]\n", node1, node2, cost);
+        }
+
+    }
+
 
 }
