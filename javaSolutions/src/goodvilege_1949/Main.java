@@ -10,7 +10,7 @@ public class Main {
     public static int[] people; // 마을 인구수
 
     public static Node[] nodes; // 트리 구성에 사용할 노드
-    public static int[] dp;
+    public static int[][] dp;
 
     public static void main(String[] args) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -18,13 +18,14 @@ public class Main {
         N = Integer.parseInt(reader.readLine());
 
         // dp 테이블 초기화
-        dp = new int[N+1];
-        Arrays.fill(dp, 0);
+        dp = new int[N+1][2];
+        for(int i=0; i<2; i++) {
+            Arrays.fill(dp[i], 0);
+        }
 
         // 노드 배열 초기화
         nodes = new Node[N+1];
-        // 노드를 0부터 초기화 (0번은 루트 노드)
-        for(int i=0; i<=N; i++) {
+        for(int i=1; i<=N; i++) {
             nodes[i] = new Node(i);
         }
 
@@ -34,7 +35,6 @@ public class Main {
         for(int i=1; i<=N; i++) {
             people[i] = Integer.parseInt(tkn.nextToken());
         }
-        people[0] = 0; // 0번 노드 (루트 노드)의 인구수는 0으로 설정
 
         // nodes를 통해 트리 구성하기
         int src, dst;
@@ -44,77 +44,52 @@ public class Main {
             src = Integer.parseInt(tkn.nextToken());
             dst = Integer.parseInt(tkn.nextToken());
             // src -> dst 방향으로 트리 구성 (오름차순)
-            parent = Math.min(src, dst);
-            child = Math.max(src, dst);
-            nodes[parent].children.add(child);
-            nodes[child].parent = parent;
+            nodes[src].children.add(dst);
+            nodes[dst].children.add(src);
         }
 
-        for(int i=1; i<=N; i++) {
-            if (nodes[i].parent == 0) // 부모가 0인 노드들을 children에 추가
-                nodes[0].children.add(i);
+        for(int i=0; i<=N; i++) {
             System.out.println("nodes[i] = " + nodes[i]);
         }
 
         // 각 노드가 우수마을이다 -> 그 하위 트리들의 우수마을 여부가 결정된다...
         // 어떤 노드가 우수마을이다 -> 그 하위 노드들은 우수마을이 아니다.
         // 해당 노드가 우수마을일 때 우수마을의 인구수를 dp 테이블에 저장.
-        for(int i=N; i>=0; i--) {
-            dp[i] = calc(i);
-        }
+        calc(1, 0);
 
-        for(int i=0; i<=N; i++) {
-            System.out.printf("dp[%d] = %d\n", i, dp[i]);
-        }
-
-        System.out.println(dp[0]);
-
+//        System.out.println(dp[1][0]);
+//        System.out.println(dp[1][1]);
+        System.out.println(Math.max(dp[1][0], dp[1][1]));
     }
 
     // dp 테이블에 넣을 값을 계산 -> 자신이 우수마을일 때, 우수마을이 아닐 때 중 더 큰 값으로 저장.
-    public static int calc(int n) {
+    public static void calc(int n, int parent) {
         Node curNode = nodes[n];
 
-        // 1. 자신의 인구수 + 2세대 뒤 마을들의 dp값 (자신이 우수마을일 경우)
-        int sum1 = people[n];
-
-        // 아래 과정은 자식이 없으면 수행되지 않음
         for(int c: curNode.children) {
-            Node child = nodes[c]; // 자식 노드
 
-            // 자식 노드의 자식들의 인구수를 더함
-            for(int gc: child.children) {
-                sum1 += dp[gc];
+            if (c != parent) {
+                calc(c, n);
+                dp[n][0] += Math.max(dp[c][0], dp[c][1]);
+                dp[n][1] += dp[c][0];
             }
 
         }
+        dp[n][1] += people[n];
 
-        // 2. 1세대 뒤 마을들의 dp값 (자신이 우수마을이 아닐 경우)
-        int sum2 = 0;
-
-        // 아래 과정은 자식이 없으면 수행되지 않음
-        for(int c: curNode.children) {
-            sum2 += dp[c];
-        }
-
-        int total = Math.max(sum1, sum2); // 1번 케이스, 2번 케이스 중 더 큰걸 리턴
-
-        return total;
     }
 
     static class Node {
         public int number;
-        public int parent;
         public List<Integer> children = new ArrayList<>();
 
         public Node(int number) {
             this.number = number;
-            this.parent = 0; // 부모를 처음에는 0으로 초기화
         }
 
         @Override
         public String toString() {
-            return String.format("Node[%d], parent = %d, children = " + children, number, parent);
+            return String.format("Node[%d], children = " + children, number);
         }
     }
 
