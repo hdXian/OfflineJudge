@@ -60,10 +60,10 @@ public class Main {
         visited[start] = true;
         minCost[start] = nodes[start];
 
-        // 1. 오른쪽과 아래 노드를 갱신한다. (간선 연결돼 있는 노드들 업데이트)
+        // 1. 상하좌우 노드를 갱신한다. (간선 연결돼 있는 노드들 업데이트)
         updateNeighbor(start);
 
-        // 2. (전체 노드 개수-1)번 반복 (...왜?) (전체 노드를 한번씩 방문? 자세히 모르겠음.)
+        // 2. (전체 노드 개수-1)번 반복
         for (int i=0; i<(N*N-1); i++) {
             // 2. 방문하지 않은 노드 중에서 가장 거리가 짧은 노드를 가져온다.
             int cur = getClosestNode();

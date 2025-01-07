@@ -34,7 +34,7 @@ public class Main {
 
         dfs(1, 0);
 
-        int maxNormal = Math.max(dp[1][1], dp[1][0]);
+        int maxNormal = Math.max(dp[1][1], dp[1][0]); // 최대의 일반인 수
 
         System.out.println("N-maxNormal = " + (N - maxNormal));
     }
@@ -44,6 +44,7 @@ public class Main {
         Node cur = nodes[n];
 
         for (int neighbor: cur.neighbor) {
+
             if (neighbor != before) {
                 dfs(neighbor, n);
                 // 1. 현재 노드가 일반인일 때 -> 주변 노드가 모두 얼리어답터여야 한다.
@@ -51,6 +52,7 @@ public class Main {
                 // 2. 현재 노드가 일반인이 아닐 때 -> 주변 노드는 일반인이어도 되고, 아니어도 된다.
                 dp[n][0] += Math.max(dp[neighbor][1], dp[neighbor][0]);
             }
+
         }
         dp[n][1] += 1; // 현재 노드가 일반인인 경우에 자신을 추가
     }
