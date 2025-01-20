@@ -1,4 +1,4 @@
-package prob_202501.printStar_10993;
+package prob_202501.week2.printStar_10993;
 
 import java.util.*;
 import java.io.*;

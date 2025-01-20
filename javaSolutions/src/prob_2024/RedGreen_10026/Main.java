@@ -1,4 +1,4 @@
-package prob_202501.RedGreen_10026;
+package prob_2024.RedGreen_10026;
 
 import java.util.*;
 import java.io.*;

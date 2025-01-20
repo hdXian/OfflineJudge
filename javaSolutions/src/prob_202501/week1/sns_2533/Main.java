@@ -1,4 +1,4 @@
-package prob_202501.sns_2533;
+package prob_202501.week1.sns_2533;
 
 import java.util.*;
 import java.io.*;

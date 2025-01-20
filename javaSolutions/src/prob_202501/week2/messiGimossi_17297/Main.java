@@ -1,4 +1,4 @@
-package prob_202501.messiGimossi_17297;
+package prob_202501.week2.messiGimossi_17297;
 
 import java.io.*;
 

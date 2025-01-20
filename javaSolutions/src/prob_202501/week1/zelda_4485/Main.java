@@ -1,4 +1,4 @@
-package prob_202501.zelda_4485;
+package prob_202501.week1.zelda_4485;
 
 import java.util.*;
 import java.io.*;

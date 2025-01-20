@@ -1,4 +1,4 @@
-package prob_202501.needMoreElectricity_10423;
+package prob_2024.needMoreElectricity_10423;
 
 import java.io.*;
 import java.util.*;
