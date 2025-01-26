@@ -11,6 +11,7 @@ public class Main {
 
     public static List<List<Integer>> edges = new ArrayList<>();
     public static int[] degree;
+    public static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws Exception {
 
@@ -57,8 +58,20 @@ public class Main {
         }
         System.out.println("reverseMap = " + reverseMap);
 
-        printDegree();
+//        printDegree();
         topologySort();
+
+        boolean flag = true;
+        for(Integer val: map.values()) {
+            if (degree[val] != 0) {
+                System.out.println(-1);
+                flag = false;
+                break;
+            }
+        }
+
+        if (flag)
+            System.out.println(sb);
 
     }
 
@@ -66,34 +79,32 @@ public class Main {
     // reverseMap -> Key: Integer, Value: String
     // 위상 정렬
     public static void topologySort() {
-        StringBuilder sb = new StringBuilder();
-
         // 진입 차수가 0인 노드들끼리의 순서는 사전 순이다.
 
         // 진입 차수가 0인 노드들을 처음에 받는다.
-        Queue<String> pq = new PriorityQueue<>();
+        List<String> zlist = new ArrayList<>();
         for (Integer value : map.values()) {
-            System.out.println("value = " + value);
-            System.out.println("degree[value] = " + degree[value]);
             if (degree[value] == 0)
-                pq.add(reverseMap.get(value));
+                zlist.add(reverseMap.get(value));
         }
 
-        Queue<String> q = new LinkedList<>(pq); // pq로 정렬한 노드들로 큐를 구성
-        pq.clear();
+        Collections.sort(zlist);
+        Queue<String> q = new LinkedList<>(); // pq로 정렬한 노드들로 큐를 구성
+        for(String item: zlist) {
+            q.add(item);
+        }
+//        pq.clear();
 
-        int count = 0;
         int length;
         while (!q.isEmpty()) {
-            System.out.println("q = " + q);
             length = q.size();
+
+            List<String> sortList = new ArrayList<>();
 
             // 진입 차수가 0인 요소를 꺼낸다.
             for(int i=0; i<length; i++) {
                 String item = q.poll();
-                System.out.println("item = " + item);
-                count++;
-                sb.append(item).append('\n');
+                sb.append(item).append("\n");
 
                 Integer num = map.get(item); // 해당 아이템의 번호 가져오기
                 List<Integer> nodes = edges.get(num - 1); // 해당 아이템 번호의 인접 노드들 번호 가져오기
@@ -102,38 +113,20 @@ public class Main {
                 for (Integer n: nodes) {
                     degree[n]--;
                     if (degree[n] == 0) {
-                        pq.add(reverseMap.get(n)); // key가 번호인 map에서 아이템 이름을 가져온다.
+                        sortList.add(reverseMap.get(n)); // key가 번호인 map에서 아이템 이름을 가져온다.
                     }
                 }
             }
 
-            System.out.println("pq = " + pq);
-            q.addAll(pq); // pq로 정렬해놓은 노드들을 큐의 뒤에 삽입한다.
-            pq.clear(); // pq를 비운다.
-        }
+            Collections.sort(sortList);
 
-        // 꺼내진 노드 개수가 전체 개수보다 적다 -> 모든 아이템을 살 수 없다 (위상정렬이 불가능하다)
-        System.out.println("count = " + count);
-        System.out.println("reverseMap.size() = " + reverseMap.size());
-        if (count != reverseMap.size()) {
-            System.out.println(-1);
-        }
-        else {
-            sb.deleteCharAt(sb.length()-1); // 마지막 개행문자 제거
-            System.out.println("sb = " + sb);
+            for(String item: sortList) {
+                q.add(item);
+            }
+
         }
 
     }
 
-    public static void printDegree() {
-        for(int i=1; i<=2*N; i++) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
-        for(int i=1; i<=2*N; i++) {
-            System.out.print(degree[i] + " ");
-        }
-        System.out.println();
-    }
 
 }
