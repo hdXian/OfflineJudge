@@ -41,13 +41,15 @@ public class Main {
 
                 System.out.println("person1 = " + person1 + ", person2 = " + person2);
 
+                // 1번 추가 -> counst[1] = 1;
                 if (!persons.containsKey(person1)) {
                     seq++;
                     persons.put(person1, seq); // 네트워크에 없던 새로운 사람이면 persons Map에 추가
                     parents[seq] = seq; // parents 배열의 해당 인덱스 값 초기화 (처음 부모는 자기 자신으로)
                     counts[seq] = 1;
                 }
-
+                // 1번 추가 -> counst[1] = 1;
+                // 2번 추가 -> counst[2] = 1;
                 if (!persons.containsKey(person2)) {
                     seq++;
                     persons.put(person2, seq); // 네트워크에 없던 새로운 사람이면 persons Map에 추가
@@ -78,12 +80,13 @@ public class Main {
 
     }
 
+    // union 하는 과정은 생략 불가
     public static void union(int n1, int n2) {
         int p1 = findParent(n1); // 부모 노드의 번호
         int p2 = findParent(n2); // 부모 노드의 번호
 
         if (p1 != p2) {
-            if (p1 < p2) {
+            if (p1 < p2) { // 부모가 1로 정해짐
                 parents[p2] = p1;
                 counts[p1] += counts[p2];
             }
