@@ -59,6 +59,9 @@ public class Main {
 
         topologySort();
 
+        // map:        K: goredrinker, V: 1
+        // reverseMap: K:1, V: goredrinker
+
 //        boolean flag = true;
 //        for(Integer val: map.values()) {
 //            if (degree[val] != 0) {

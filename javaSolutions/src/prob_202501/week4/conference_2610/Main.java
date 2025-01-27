@@ -110,13 +110,12 @@ public class Main {
         // 플로이드 끝나면, 위원회 멤버들을 대상으로 거리를 비교하고, 최단거리를 갱신.
         int minCost = INF;
         int president = root; // 대표 번호
-        int tmp_max;
+        int tmp_max; // 최대 시간
         // 의사 전달 시간의 최대 길이가 가장 짧은 멤버를 찾는다.
         for (int m: members) {
             tmp_max = 0;
             // 해당 멤버에 대한 의사 전달 시간 중 최댓값을 찾는다.
             for (int p: members) {
-                // if (p==m) continue; // 자기 자신은 생략
                 if ((graph[p][m] != INF) && (graph[p][m] > tmp_max))
                     tmp_max = graph[p][m];
             }
