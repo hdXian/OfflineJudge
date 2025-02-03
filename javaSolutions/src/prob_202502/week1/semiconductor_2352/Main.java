@@ -2,6 +2,7 @@ package prob_202502.week1.semiconductor_2352;
 
 import java.util.*;
 import java.io.*;
+import java.math.*;
 
 public class Main {
 
