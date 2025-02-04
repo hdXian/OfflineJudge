@@ -77,7 +77,6 @@ public class Main {
 
         // 간선 입력받기
         // 여기서 입력받은 간선은 MST에 무조건 포함되어야 함.
-        // 무조건 포함되어야 하나? 새로 만드는 비용을 최소로 한다
         // edges에 같이 넣고 정렬하는게 아니라, 여기서 미리 MST 과정을 돌려놔야 함.
         int _n1, _n2;
         for(int i=0; i<M; i++) {
@@ -94,7 +93,7 @@ public class Main {
                 continue;
 
 //            edges.add(new Edge(_n1, _n2, cost));
-            union(_n1, _n2);
+            union(_n1, _n2); // union을 미리 시켜놓는다.
             edge_count++;
             isLinked[_n1][_n2] = true;
             isLinked[_n2][_n1] = true;

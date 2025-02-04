@@ -45,7 +45,7 @@ public class Main2 {
                 table[0] = cur;
                 printTable(tail);
             }
-            // 2. 현재 요소가 dp 테이블의 최댓값 (tail이 가리키는 요소)보다 크면, 해당 요오슬 dp 테이블의 끝에 추가한다.
+            // 2. 현재 요소가 dp 테이블의 최댓값 (tail이 가리키는 요소)보다 크면, 해당 요소를 dp 테이블의 끝에 추가한다.
             else if (cur > table[tail-1]) {
                 System.out.printf("cur(%d)가 table[tail-1](%d)보다 큼.\n", cur, table[tail-1]);
                 table[tail] = cur;
