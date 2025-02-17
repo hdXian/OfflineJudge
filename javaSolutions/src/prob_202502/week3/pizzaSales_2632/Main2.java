@@ -4,6 +4,8 @@ import java.util.*;
 import java.math.*;
 import java.io.*;
 
+// 2. 누적합 활용 - 메서드 추출
+
 public class Main2 {
 
     public static int P;

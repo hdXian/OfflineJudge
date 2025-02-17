@@ -4,6 +4,8 @@ import java.util.*;
 import java.math.*;
 import java.io.*;
 
+// 1. 최초 풀이 - 브루트 포스
+
 public class Main {
 
     public static int P;

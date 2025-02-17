@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 import java.math.*;
 
+// 3. 누적합 활용 - 메인 코드에 그대로 적용
+
 public class Main3 {
 
     public static int P;
