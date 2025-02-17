@@ -32,7 +32,6 @@ public class Main {
         M = Integer.parseInt(tkn.nextToken()); // 피자 A 조각 개수 (3 ~ 1000)
         N = Integer.parseInt(tkn.nextToken()); // 피자 B 조각 개수
 
-
         // 피자 A 조각 입력받기
         // ex) 2 2 1 7 2
         pieces = new int[M];
@@ -45,7 +44,15 @@ public class Main {
         }
 
         // 피자 개수별로 나올 수 있는 조합 계산
-        for(int i=2; i<=M; i++) {
+        // 누적합을 이용해 모든 연속된 조각의 경우의 수 구하기 -> 이걸 사용해서 시간을 줄여야 하나보다. 이걸 찾아보자. 다른 알고리즘은 다른게 없는 것 같음.
+        int tmp = 0;
+        for(int k=0; k<M; k++) {
+            tmp += pieces[k];
+        }
+        if (tmp <= P)
+            tableA[tmp] = 1;
+
+        for(int i=2; i<M; i++) {
             for(int j=0; j<M; j++) {
                 // j번째 조각부터 i개의 조각 이어붙이기
                 int size = 0;
@@ -73,8 +80,15 @@ public class Main {
                 tableB[piece] += 1;
         }
 
+        tmp = 0;
+        for(int k=0; k<N; k++) {
+            tmp += pieces[k];
+        }
+        if (tmp <= P)
+            tableB[tmp] = 1;
+
         // 피자 개수별로 나올 수 있는 조합 계산
-        for(int i=2; i<=N; i++) {
+        for(int i=2; i<N; i++) {
             for(int j=0; j<N; j++) {
                 // j번째 조각부터 i개의 조각 이어붙이기
                 int size = 0;
