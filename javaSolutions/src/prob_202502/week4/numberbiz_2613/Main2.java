@@ -101,6 +101,8 @@ public class Main2 {
                 for(int k=i+1; k<N; k++)
                     ballCounts.add(1);
 
+                System.out.println("ballCounts = " + ballCounts);
+
                 break;
             }
 
