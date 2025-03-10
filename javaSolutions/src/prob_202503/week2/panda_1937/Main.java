@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.*;
 import java.math.*;
 
+// 해설 참고 코드
 public class Main {
 
     public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -12,6 +13,8 @@ public class Main {
 
     public static int result;
     public static int[][] table;
+    public static int[] dr = {-1, 1, 0, 0};
+    public static int[] dc = {0, 0, -1, 1};
 
     public static void init() throws Exception {
         N = Integer.parseInt(reader.readLine());
@@ -38,7 +41,7 @@ public class Main {
         init();
         for(int r=0; r<N; r++) {
             for(int c=0; c<N; c++) {
-                result = Math.max(result, dfs(r, c, r, c, 1));
+                result = Math.max(result, dfs(r, c));
             }
         }
 
@@ -48,75 +51,28 @@ public class Main {
 
     }
 
-    public static int dfs(int start, int end, int row, int col, int depth) {
-
-        if (table[start][end] != -1)
-            return table[start][end];
+    public static int dfs(int row, int col) {
+        if (table[row][col] != -1)
+            return table[row][col];
 
         // 시작 점을 정하고, 상하좌우로 이동한다.
-        System.out.printf("visit forest[%d][%d], depth = %d\n", row, col, depth);
-        int val = forest[row][col];
-        boolean isEdge = true;
+        System.out.printf("visit forest[%d][%d]\n", row, col);
+        table[row][col] = 1;
 
-        // 상
-        if (row > 0) {
-            if (forest[row-1][col] > val) {
+        // 상하좌우 체크
+        for(int k=0; k<4; k++) {
+            int nr = row + dr[k];
+            int nc = col + dc[k];
 
-                // 테이블에 저장된 값이 있다면 (시작점의 기존 값, 깊이 + 테이블 값) 중 더 큰 것으로 저장a
-                if (table[row-1][col] != -1)
-                    table[start][end] = Math.max(table[start][end], depth + table[row-1][col]);
-
-                else
-                    dfs(start, end, row-1, col, depth+1);
-
-                isEdge = false;
+            // 조건을 만족하면
+            if ((nr >= 0) && (nc >= 0) && (nr <= N-1) && (nc <= N-1) && (forest[nr][nc] > forest[row][col])) {
+                table[row][col] = Math.max(table[row][col], dfs(nr, nc)+1); // 지금까지 저장된 값과, 다른 칸으로 이동했을 때의 움직일 수 있는 값을 비교.
             }
+
         }
 
-        // 하
-        if (row < N-1) {
-            if (forest[row+1][col] > val) {
-
-                if (table[row+1][col] != -1)
-                    table[start][end] = Math.max(table[start][end], depth + table[row+1][col]);
-                else
-                    dfs(start, end, row+1, col, depth+1);
-
-                isEdge = false;
-            }
-        }
-
-        // 좌
-        if (col > 0) {
-            if (forest[row][col-1] > val) {
-
-                if (table[row][col-1] != -1)
-                    table[start][end] = Math.max(table[start][end], depth + table[row][col-1]);
-                else
-                    dfs(start, end, row, col-1, depth+1);
-
-                isEdge = false;
-            }
-        }
-
-        // 우
-        if (col < N-1) {
-            if (forest[row][col+1] > val) {
-
-                if (table[row][col+1] != -1)
-                    table[start][end] = Math.max(table[start][end], depth + table[row][col+1]);
-                else
-                    dfs(start, end, row, col+1, depth+1);
-
-                isEdge = false;
-            }
-        }
-
-        // 끝에 도달했으면 table 값과 비교해서 저장
-        if (isEdge)
-            table[start][end] = Math.max(table[start][end], depth);
-
-        return table[start][end];
+        // 더이상 못 움직이는 경우 for문을 못 돌고 1로 초기화된 테이블 값을 뱉을꺼임.
+        return table[row][col];
 
         // 상하좌우로 계속 이동하면서 가능한 경로를 찾고, 더이상 못 움직이면 탐색을 끝낸다.
         // 탐색이 끝났을 때 이동한 값을 result와 비교하고, 더 큰 값으로 업데이트한다.
