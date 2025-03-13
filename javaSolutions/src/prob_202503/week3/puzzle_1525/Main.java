@@ -18,6 +18,7 @@ public class Main {
     // ex. 3 1 2        0 1 2      3 1 2      3 1 2
     //     0 5 6   =>   3 5 6  or  5 0 6  or  4 5 6
     //     4 8 7        4 8 7      4 8 7      0 8 7
+    // 예시의 칸은 서로 다른 3가지 상황으로부터 만들어질 수 있음. 즉 노드 방문을 visited 처리하는게 아니라 각 퍼즐의 상태를 저장해서 방문 여부(중복 여부)를 걸러내야 함.
     public static Set<String> codeSet = new HashSet<>();
 
     public static int[] dr = {-1, 1, 0, 0};
