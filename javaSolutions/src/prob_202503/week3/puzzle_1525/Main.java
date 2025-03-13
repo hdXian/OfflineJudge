@@ -11,6 +11,13 @@ public class Main {
 
     public static int[][] puzzle;
     public static int r, c;
+
+    // 퍼즐의 상태를 하나의 문자열로 표현해 저장하고, 이걸 visited로 활용해서 기록. 노드 방문여부가 아니라 퍼즐의 상태를 기억해서 bfs를 돌려야 함.
+    // 예를 들어 0번 칸이 2행 1열에 위치했다고 했을 때, 0번 칸이 그 칸에 도달하는 경로는 위, 아래, 오른쪽 총 3가지임.
+    // 각 방향에서 0번 칸이 2행 1열로 이동해 왔다면, 각각 3가지의 다른 퍼즐 판이 만들어짐. 기존 칸과 값을 바꾸면서 움직이는데, 3개의 각각 다른 칸과 값을 바꾸면서 이동했기 때문.
+    // ex. 3 1 2        0 1 2      3 1 2      3 1 2
+    //     0 5 6   =>   3 5 6  or  5 0 6  or  4 5 6
+    //     4 8 7        4 8 7      4 8 7      0 8 7
     public static Set<String> codeSet = new HashSet<>();
 
     public static int[] dr = {-1, 1, 0, 0};
