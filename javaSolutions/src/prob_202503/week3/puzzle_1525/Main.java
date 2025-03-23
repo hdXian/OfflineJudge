@@ -56,7 +56,6 @@ public class Main {
         System.out.println("result = " + result);
     }
 
-    // 재귀를 써야하나?
     public static int bfs(int row, int col, int[][] puzzle) {
         int depth = 0;
 
