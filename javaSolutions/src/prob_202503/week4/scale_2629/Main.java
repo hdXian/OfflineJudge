@@ -37,7 +37,7 @@ public class Main {
     public static void calc() throws Exception {
         // 1. 무게추들을 가져와 가능한 무게들의 집합을 생성한다.
         Set<Integer> tmp = new HashSet<>();
-        for (int rim: rims) {
+        for (int rim: rims) { // 무게추들에 대한 반복문
             tmp.add(rim);
 
             for (int n: ableSet) {
