@@ -55,6 +55,7 @@ public class Main {
         return val;
     }
 
+    // 구간 최소 구하는 함수
     public static int find(int node, int start, int end, int left, int right) {
         // 범위를 벗어나면 INF 리턴
         if (left > end || right < start)
