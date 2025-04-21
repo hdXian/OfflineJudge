@@ -34,6 +34,7 @@ public class Main {
         N = Integer.parseInt(reader.readLine());
         K = Integer.parseInt(reader.readLine());
 
+        // 뱀이 있는 보드 초기화
         board = new boolean[N+1][N+1];
         board[1][1] = true;
 
@@ -70,12 +71,14 @@ public class Main {
 
     static int calc() throws Exception {
         // 뱀을 초기화한다.
-        int t = 0;
-        int curDir = 1;
-        int row = 1;
+        int t = 0; // 경과 시간
+        int curDir = 1; // 현재 머가리 방향
+        int row = 1; // 머리의 좌표 r,c
         int col = 1;
+        // snake.add(new Pair(row, col))
         snake.addFirst(new Pair(1, 1));
 
+        // 명령어 입력 시간을 저장하는 큐
         Queue<Integer> cmd_times = new PriorityQueue<>(cmds.keySet());
         int next_t = -1;
         String next_cmd = "L";
@@ -83,7 +86,6 @@ public class Main {
             next_t = cmd_times.poll();
             next_cmd = cmds.get(next_t);
         }
-
 
         // 시간을 1씩 증가시키면서, cmds에 명시된 시간이 되면 방향을 전환한다.
         Pair tail;
