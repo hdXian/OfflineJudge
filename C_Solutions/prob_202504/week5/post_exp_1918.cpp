@@ -7,6 +7,7 @@ static string exps = "()+-*/";
 static int priors[] = {0, 0, 1, 1, 2, 2};
 
 string calc(string exp) {
+    // pair: <연산자, 우선순위>
     stack<pair<char, int>> exp_stk;
     string result = "";
 
