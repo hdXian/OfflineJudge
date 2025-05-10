@@ -12,7 +12,7 @@ public class Main {
     static int N, M, X;
 
     static int[][] graph;
-    static final int INF = 999; // 길 비용의 최대는 100
+    static final int INF = 1000001; // 길 비용의 최대는 100 * 10000 = 100만
 
     static void init() throws Exception {
         StringTokenizer tkn = new StringTokenizer(reader.readLine());

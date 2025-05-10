@@ -52,9 +52,9 @@ public class Main2 {
         int s, r, t;
         for(int i=0; i<M; i++) {
             tkn = new StringTokenizer(reader.readLine());
-            s = Integer.parseInt(tkn.nextToken());
-            r = Integer.parseInt(tkn.nextToken());
-            t = Integer.parseInt(tkn.nextToken());
+            s = Integer.parseInt(tkn.nextToken()); // 출발지
+            r = Integer.parseInt(tkn.nextToken()); // 목적지
+            t = Integer.parseInt(tkn.nextToken()); // 비용
             neighbors.get(s-1).add(new Edge(t, r)); // 인접 리스트에 추가
             reverse_neighbors.get(r-1).add(new Edge(t, s)); // 반대방향 인접 리스트 추가
         }
@@ -66,6 +66,8 @@ public class Main2 {
     // 다익스트라
     static void dijkstra(int start, int[] table, List<List<Edge>> neighbors) {
         // start번 노드에 대해 다익스트라 알고리즘을 돌린다.
+        // 1. 정방향 그래프 -> 출발지 X로 다익스트라 -> (X번 노드 -> 모든 노드까지의 최단거리)
+        // 2. 역방향 그래프 -> 출발지 X로 다익스트라 -> (모든 노드 -> X번 노드까지의 최단거리)
 
         // 1. start번 노드에 대한 최단 거리 테이블 초기화
         Arrays.fill(table, INF);

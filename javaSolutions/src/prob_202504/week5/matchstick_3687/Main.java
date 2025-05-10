@@ -21,10 +21,12 @@ public class Main {
 
     static String moveZero(String s) {
         int seq = 0;
+
         while(seq < s.length() && s.charAt(seq) == '0') seq++;
 
         String zeros;
         char head;
+
         if(seq == s.length()) {
             zeros = s.substring(0, seq-1);
             return '6' + zeros;
@@ -45,7 +47,7 @@ public class Main {
             cases[i] = Integer.parseInt(reader.readLine()); // 성냥개비 개수 (2 ~ 100)
 
         min_dp = new String[101]; // 인덱스 1부터 쓰기
-        char[] tmp = "174208".toCharArray();
+        char[] tmp = "174208".toCharArray(); // {"1", "7", "4", "2", "0", "8"}
         for(int i=2; i<=7; i++) {
             min_dp[i] = String.valueOf(tmp[i-2]);
         }
