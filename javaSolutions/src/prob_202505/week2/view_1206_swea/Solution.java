@@ -41,7 +41,7 @@ class Solution {
             l_max = Math.max(bs[i-1], bs[i-2]);
             r_max = Math.max(bs[i+1], bs[i+2]);
             t_max = Math.max(l_max, r_max);
-            result += Math.max(0, bs[i] - t_max);
+            result += Math.max(0, bs[i] - t_max); // 높이 뺀 결과가 음수면 더하면 안됨
         }
 
         return result;
