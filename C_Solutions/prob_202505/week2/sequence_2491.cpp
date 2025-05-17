@@ -46,7 +46,7 @@ int main() {
     int N; // 수열 길이. 1 ~ 10만
     cin >> N;
 
-    vector<int> seq;
+    vector<int> seq; // List
     int tmp;
     for(int i=0; i<N; i++) {
         cin >> tmp;
