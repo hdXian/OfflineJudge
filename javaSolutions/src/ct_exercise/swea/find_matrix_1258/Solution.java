@@ -27,19 +27,22 @@ class Solution {
     }
 
     static SubMatrix findMatrix(int r, int c, int[][] matrix, boolean[][] visited, int n) {
-        int row_edge = r;
-        int col_edge = c;
+        int row_edge = r; // 행 끝
+        int col_edge = c; // 열 끝
         while(row_edge < n && matrix[row_edge][c] != 0) row_edge++;
         while(col_edge < n && matrix[r][col_edge] != 0) col_edge++;
 
         System.out.println("row_edge = " + row_edge);
         System.out.println("col_edge = " + col_edge);
+
+        // 찾은 부분행렬 영역에 대해 방문 처리
         for(int i=r; i<row_edge; i++) {
             for(int j=c; j<col_edge; j++) {
                 visited[i][j] = true;
             }
         }
 
+        // 행, 열 크기를 담은 Matrix 객체 리턴
         return new SubMatrix(row_edge-r, col_edge-c);
     }
 
@@ -48,6 +51,7 @@ class Solution {
         boolean[][] visited = new boolean[n][n];
         for(boolean[] v: visited) Arrays.fill(v, false);
 
+        // 정렬 기준이 정의된 Matrix 객체를 pq를 이용해 순회
         PriorityQueue<SubMatrix> pq = new PriorityQueue<>();
 
         // 2. 행렬을 순회하다가 방문한 적 없으면서 0이 아닌 요소를 만나면 왼쪽, 아래쪽으로 행렬을 탐색한다.
