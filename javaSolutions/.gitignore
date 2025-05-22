@@ -29,3 +29,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+## non-source file
+*.txt
