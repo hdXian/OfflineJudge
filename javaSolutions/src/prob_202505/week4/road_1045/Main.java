@@ -84,11 +84,11 @@ public class Main {
     // 단, 걸러진 도로를 그냥 버리지 않고 따로 남겨둬야 함.
     // MST를 만든 다음 M을 채우기 모자란 만큼 도로를 더 추가해야 하기 때문.
     static String calc() {
-        PriorityQueue<Edge> remains = new PriorityQueue<>();
+        PriorityQueue<Edge> remains = new PriorityQueue<>(); // leftQueue
 
-        List<Edge> MST_edges = new ArrayList<>();
+        List<Edge> MST_edges = new ArrayList<>(); // 답 출력할떄 쓸꺼
 
-        // 기준에 따라 도로를 선택하며 MST를 구성한다.
+        // 기준에 따라 도로를 선택하며 MST를 구성한다. -> 문제에서 말한 "연결된 집합"
         int edge_count = 0;
         while(!pq.isEmpty() && edge_count < N-1) {
             Edge cur = pq.poll();

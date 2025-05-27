@@ -26,6 +26,9 @@ public class Main {
 
     }
 
+    // Node 클래스를 두가지 방식으로 썼음
+    // 1. (노드 번호, 실제 간선 비용) -> 이거는 이웃 노드들 확인할 때만 씀
+    // 2. (노드 번호, 0 또는 1) -> 기준값보다 싸거나 같으면 비용 0, 아니면 비용 1 -> 이거는 다익스트라에서 돌리는 pq에 들어감
     static Map<Integer, List<Node>> neighbors = new HashMap<>(); // 노드 번호별 이웃 노드들을 저장할 Map
 
     static void init() throws Exception {
