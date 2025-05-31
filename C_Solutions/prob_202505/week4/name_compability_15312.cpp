@@ -4,10 +4,14 @@
 
 using namespace std;
 
+
+// 'A', 'B', 'C', ... 에 대응하는 획수
 int alpha[] = { 3, 2, 1, 2, 3, 3, 2, 3, 3, 2, 2, 1, 2, 2, 1, 2, 2, 2, 1, 2, 1, 1, 1, 2, 2, 1 };
 
-
 string calc(string A, string B) {
+
+    // A: CJM
+    // B: HER
 
     // 1. 각 알파벳을 숫자로 변환한 값을 벡터에 저장한다.
     vector<int> arr;
