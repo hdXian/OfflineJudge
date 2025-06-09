@@ -52,6 +52,9 @@ int bfs(vector<string>& board, Node src, Node dst) {
 }
 
 int solution(vector<string> maps) {
+    // List<String>
+    // vector<> -> []
+    // string -> charAt(idx) X -> start str; str[idx];
     // 1. 출발지점 -> 레버 칸으로 이동하는 최단거리 구하기
     // 2. 레버 칸 -> 출구 칸으로 이동하는 최단거리 구하기
     // 3. 둘이 더하기
