@@ -155,7 +155,7 @@ public class Main {
 
     static void removeBlock(BlockGroup bg) {
         for(Point p: bg.blocks) {
-            board[p.row][p.col] = -99;
+            board[p.row][p.col] = _BLANK;
         }
     }
 
